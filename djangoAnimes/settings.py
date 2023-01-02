@@ -35,7 +35,7 @@ ALLOWED_HOSTS = []
 # Application definition
 MY_APPS = []
 
-THIRD_PARTY_APPS = ['rest_framework']
+THIRD_PARTY_APPS = ['rest_framework','rest_framework_simplejwt']
 
 DJANGO_APPS = [
     'django.contrib.admin',
