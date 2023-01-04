@@ -9,7 +9,6 @@ class Achievement(models.Model):
         url = models.CharField(max_length=255)
         type_of_achievement = models.CharField(max_length=255)
         users = models.ManyToManyField(
-            User,
-            through="achievement_user",
+            "users.User",
             related_name="achievements",
         )
