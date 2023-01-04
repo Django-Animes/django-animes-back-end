@@ -8,6 +8,5 @@ class TypeUser(models.TextChoices):
     TYPE_FREE = 'Free'
 
 class User(AbstractUser):
-    
     email = models.EmailField(unique=True)
     type = models.TextChoices(choices=TypeUser.choices,default=TypeUser.TYPE_FREE)
