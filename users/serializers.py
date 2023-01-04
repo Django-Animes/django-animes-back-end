@@ -14,6 +14,7 @@ class UserSerializer(serializers.ModelSerializer):
             "last_name",
             "type",
             "is_superuser",
+            "is_active"
         ]
         extra_kwargs = {
             id: {"read_only": True},
@@ -36,3 +37,11 @@ class UserSerializer(serializers.ModelSerializer):
             user = User.objects.create_user(**validated_data)
 
         return user
+    
+    def update(self, instance: User, validated_data: dict) -> User:
+        for key, value in validated_data.items():
+            setattr(instance, key, value)
+
+        instance.save()
+
+        return instance
