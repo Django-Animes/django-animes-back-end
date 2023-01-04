@@ -1,4 +1,4 @@
-# Vibefy documentation API
+# DjangoAnimes README API
 
 ## Tabela de Conteúdos
 
@@ -49,34 +49,40 @@ Visão Geral das tecnologias usadas no projeto.
 
 ### 4.1 Requisitos
 
-- NodeJs a partir da versão 16.14.1
-- Gerenciador de pacotes yarn ou npm
+- Python a partir da versão 3.11.1
+- Gerenciador de pacotes pip
 - Banco de dados PostgreSQL
 
 ### 4.2 Instalação
 
-4.2.1 - Crie um banco de dados chamado vibe_database no PostgreSQL
-4.2.2 - Após o clone no repositório para adicionar todas as dependências do package json execute o comando:
-`yarn install`
+4.2.1 - Crie um banco de dados chamado Django_animes_database no PostgreSQL
+4.2.2 - Após o clone no repositório crie um ambiente de desenvolvimento:
+`python -m venv venv`
+4.2.3 - Após a criação do ambiente virtual voce terá que ativa-lo com o seguinte comando
+ para linux:`source/venv/bin/activate`
+ para windows: `.\venv\Scripts\activate`
+
+4.2.4 - Agora que ja ativou o ambiênte de desenvolvimento voce terá que instalar as dependências do projeto
+`pip install -r requirements.txt`
+
+4.2.5 - Após instalar as dependências vamos persistir as migrations no banco de dados
+`python manage.py migrate`
 
 4.2.3 - Crie um arquivo na raiz do projeto chamado .env e faça as configurações das variáveis de ambiente com base no .env.example do projeto
 
 ```
 SECRET_KEY= chave secreta definida pelo seu time de desenvolvimento
 DATABASE_URL=postgresql://seu_usuario:sua_senha@localhost:5432/vibe_database
-ADM_HASH= hash de administrador definida pela equipe de desenvolvimento
-AWS_ACCESS_KEY_ID= id de acesso da aws para salvar seus arquivos
-AWS_SECRET_ACCESS_KEY= chave de acesso da aws para salvar seus arquivos
 ```
 
-4.2.4 - Para rodar projeto utilize o comando `yarn dev` no terminal, caso de tudo certo receberá uma mensagem parecida com essa:
+4.2.4 - Para rodar projeto utilize o comando `python manage.py runserver` no terminal, caso de tudo certo receberá uma mensagem parecida com essa:
 
 ```
-[INFO] 17:23:18 ts-node-dev ver. 2.0.0 (using ts-node ver. 10.9.1, typescript ver. 4.8.4)
-query: SELECT * FROM current_schema()
-query: CREATE EXTENSION IF NOT EXISTS "uuid-ossp"
-query: SELECT version();
-Servidor executando.
+System check identified no issues (0 silenced).
+January 04, 2023 - 13:53:34
+Django version 4.1.5, using settings 'djangoAnimes.settings'
+Starting development server at http://127.0.0.1:8000/
+Quit the server with CTRL-BREAK.
 ```
 
 <a name="devs"></a>
@@ -89,7 +95,7 @@ Servidor executando.
 - <a name="Gabriel-fray" href="https://www.linkedin.com/in/gabrielfray/" target="_blank">Gabriel Fray</a>
 - <a name="Guilherme-teles" href="https://www.linkedin.com/in/guilherme-teles-103853235/" target="_blank">Guilherme Teles</a>
 - <a name="Henrique-pires-Bezerra" href="https://www.linkedin.com/in/henrique-pires-bezerra/" target="_blank">Henrique Pires Bezerra</a>
-- <a name="Victor-Ávila" href="https://www.linkedin.com/in/victor-avila-br/" target="_blank">Victor Ávila</a>
+- <a name="Stevan Santos" href="https://www.linkedin.com/in/stevansantos/" target="_blank">Stevan Santos</a>
 - <a name="Vinicius-Moreira-Henrique" href="https://www.linkedin.com/in/vinicius-moreira-henrique/" target="_blank">Vinicius Moreira Henrique</a>
 
 <a name="terms"></a>
