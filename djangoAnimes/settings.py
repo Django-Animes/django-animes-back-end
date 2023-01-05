@@ -33,7 +33,14 @@ ALLOWED_HOSTS = []
 
 
 # Application definition
-MY_APPS = ["animes", "genres", "episodes", "comments","users"]
+MY_APPS = [
+    "animes",
+    "genres",
+    "episodes",
+    "profiles",
+    "users",
+    "comments",
+]
 
 THIRD_PARTY_APPS = ["rest_framework", "rest_framework_simplejwt"]
 
@@ -129,7 +136,8 @@ STATIC_URL = "static/"
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
-DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
 
 REST_FRAMEWORK = {
     "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
