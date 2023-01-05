@@ -39,6 +39,7 @@ MY_APPS = [
     "episodes",
     "profiles",
     "users",
+    "comments",
 ]
 
 THIRD_PARTY_APPS = ["rest_framework", "rest_framework_simplejwt"]
