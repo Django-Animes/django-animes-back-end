@@ -11,4 +11,5 @@ class TypeUser(models.TextChoices):
 
 class User(AbstractUser):
     email = models.EmailField(unique=True)
-    type = models.TextChoices(choices=TypeUser.choices, default=TypeUser.TYPE_FREE)
+    type = models.TextField(choices=TypeUser.choices,default=TypeUser.TYPE_FREE)
+

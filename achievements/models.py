@@ -3,8 +3,6 @@ from users.models import User
 
 
 class Achievement(models.Model):
-    class Meta:
-        ordering = ("id",)
         name = models.CharField(max_length=255)
         url = models.CharField(max_length=255)
         type_of_achievement = models.CharField(max_length=255)
@@ -14,10 +12,7 @@ class Achievement(models.Model):
             related_name="achievements",
         )
 
-class Achievement_user(models.Model):
-    
-    class Meta: 
-        ordering = ("id",)
+class Achievement_user(models.Model):  
         achievament_id: models.ForeignKey(
             Achievement,
             on_delete=models.CASCADE,
