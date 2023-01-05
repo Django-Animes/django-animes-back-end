@@ -8,12 +8,12 @@ class Comment(models.Model):
     likes = models.BigIntegerField(default=0)
 
     profile = models.ForeignKey(
-        "profile.Profile",
+        "profiles.Profile",
         on_delete=models.CASCADE,
         related_name="comments",
     )
     episode = models.ForeignKey(
-        "animes.Anime",
+        "episodes.Episode",
         on_delete=models.CASCADE,
         related_name="comments",
     )
