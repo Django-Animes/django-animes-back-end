@@ -3,11 +3,13 @@ from rest_framework.generics import ListAPIView,ListCreateAPIView,RetrieveUpdate
 import ipdb
 from .serializer import AnimeSerializer
 from episodes.serializer import EpisodeSerializer
+from genres.serializer import GenreSerializer
 from .models import Anime
 from episodes.models import Episode
+from genres.models import Genre
 from .utils import formatQueryParams
 
-class AnimesView(ListCreateAPIView):
+class AnimesListCreate(ListCreateAPIView):
     serializer_class = AnimeSerializer
     queryset = Anime.objects.all()
 
@@ -29,7 +31,7 @@ class AnimesView(ListCreateAPIView):
             animes = animes.filter(genres__name__iexact=query_genre)
         return animes
 
-class AnimesHdView(ListAPIView):
+class AnimesHdList(ListAPIView):
     serializer_class = AnimeSerializer
     queryset = Anime.objects.all()
 
@@ -42,7 +44,15 @@ class AnimesRetrieveUpdateDestroy(RetrieveUpdateDestroyAPIView):
     serializer_class = AnimeSerializer
     queryset = Anime.objects.all()
 
+class EpisodeListCreate(ListCreateAPIView):
+    serializer_class = EpisodeSerializer
+    queryset = Episode.objects.all()
+
 class EpisodeRetrieveUpdateDestroy(RetrieveUpdateDestroyAPIView):
     serializer_class = EpisodeSerializer
     queryset = Episode.objects.all()
+
+class GenreListCreate(ListCreateAPIView):
+    serializer_class = GenreSerializer
+    queryset = Genre.objects.all()
     

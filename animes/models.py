@@ -1,7 +1,7 @@
 from django.db import models
 
 class Anime(models.Model):
-    name = models.TextField()
+    name = models.TextField(unique=True)
     image_url = models.TextField()
     release_date = models.TextField()
     description = models.TextField()
