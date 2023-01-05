@@ -5,6 +5,7 @@ from .models import User
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
+        model = User
         fields = [
             "id",
             "username",
@@ -32,11 +33,11 @@ class UserSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data: dict) -> User:
         if validated_data["is_superuser"]:
-            return User.objects.create_superuser(validated_data)
-        else:
-            user = User.objects.create_user(**validated_data)
-
+            super_user = User.objects.create_superuser(**validated_data)
+            return super_user
+        user = User.objects.create_user(**validated_data)
         return user
+        
 
     def update(self, instance: User, validated_data: dict) -> User:
         for key, value in validated_data.items():
