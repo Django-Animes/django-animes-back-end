@@ -33,7 +33,13 @@ ALLOWED_HOSTS = []
 
 
 # Application definition
-MY_APPS = ["animes", "genres", "episodes", "comments"]
+MY_APPS = [
+    "users",
+    "animes",
+    "genres",
+    "episodes",
+    "comments",
+]
 
 THIRD_PARTY_APPS = ["rest_framework", "rest_framework_simplejwt"]
 

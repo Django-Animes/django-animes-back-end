@@ -11,7 +11,7 @@ class UserView(CreateAPIView):
     queryset = User.objects.all()
 
 
-class userDetailView(RetrieveUpdateAPIView):
+class UserDetailView(RetrieveUpdateAPIView):
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsAccountOwner]
 
