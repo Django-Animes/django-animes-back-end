@@ -7,7 +7,7 @@ from rest_framework.generics import RetrieveUpdateDestroyAPIView
 from rest_framework_simplejwt.authentication import JWTAuthentication
 
 
-class CommentView(CreateAPIView):
+class CommentCreateView(CreateAPIView):
     permission_classes = [IsAuthenticated]
     authentication_classes = [JWTAuthentication]
 
