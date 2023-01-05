@@ -1,7 +1,7 @@
 from rest_framework.views import status,Response,Request
 from rest_framework.generics import ListAPIView,RetrieveAPIView
 import ipdb
-from .serializer import AnimeSerializer
+from .serializers import AnimeSerializer
 from .models import Anime
 from .utils import formatQueryParams
 
