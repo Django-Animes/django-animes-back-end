@@ -1,7 +1,7 @@
 from rest_framework.views import APIView, Request, Response, status
 from rest_framework.generics import CreateAPIView, RetrieveUpdateAPIView
 from .models import User
-from .serializers import UserSerializer
+from .serializer import UserSerializer
 from .permissions import IsAccountOwner
 from rest_framework_simplejwt.authentication import JWTAuthentication
 
