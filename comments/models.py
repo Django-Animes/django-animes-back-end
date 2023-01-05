@@ -16,7 +16,7 @@ class Comment(models.Model):
     #     related_name="comments",
     # )
     episode = models.ForeignKey(
-        "animes.Anime",
+        "episodes.Episode",
         on_delete=models.CASCADE,
         related_name="comments",
     )
