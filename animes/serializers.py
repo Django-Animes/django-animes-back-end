@@ -1,8 +1,8 @@
 from rest_framework import serializers
 from django.db import models
 from .models import Anime
-from genres.serializer import GenreSerializer
-from episodes.serializer import EpisodeSerializer
+from genres.serializers import GenreSerializer
+from episodes.serializers import EpisodeSerializer
 import ipdb
 
 class AnimeSerializer(serializers.ModelSerializer):
