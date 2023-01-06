@@ -15,7 +15,7 @@ class Profile(models.Model):
     name = models.CharField(max_length=40)
     avatar_url = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
-    last_episode_viewed = models.TextField()
+    last_episode_viewed = models.TextField(default="")
     user = models.ForeignKey(
         "users.User", on_delete=models.CASCADE, related_name="profiles"
     )

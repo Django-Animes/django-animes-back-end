@@ -2,7 +2,10 @@ from django.db import models
 
 
 class Comment(models.Model):
-    text = models.TextField(max_length=400)
+    class Meta:
+        ordering = ("id",)
+
+    text = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     likes = models.BigIntegerField(default=0)

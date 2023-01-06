@@ -3,10 +3,30 @@ from rest_framework.validators import UniqueValidator
 from .models import User
 from achievements.serializer import  AchievementSerializer
 from achievements.models import Achievement
+
 import ipdb
 
+class UserAchievementSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField()
+    class Meta:
+        model = Achievement
+        fields = [
+            "id", 
+            "name", 
+            "url", 
+            "type_of_achievement"
+            ]
+        read_only_fields = [
+            "url",
+            "name",
+            "type_of_achievement"
+        ]
+       
+        
+    
+
 class UserSerializer(serializers.ModelSerializer):
-    # achievements = AchievementSerializer(many=True)
+    achievements = AchievementSerializer(many=True)
     class Meta:
         model = User
         fields = [
@@ -47,13 +67,12 @@ class UserSerializer(serializers.ModelSerializer):
     def update(self, instance: User, validated_data: dict) -> User:
         if validated_data.get("achievements"):
             achievement_data = validated_data.pop("achievements")
+            achievement = Achievement.objects.get(id=achievement_data[0]["id"]) 
             
-            for data in achievement_data:
-                instance.achievements.add(data)
-                
-                
-                
-            
+            if achievement:
+                instance.achievements.add(achievement)
+       
+                  
         for key, value in validated_data.items():
             setattr(instance, key, value)
 
@@ -61,28 +80,3 @@ class UserSerializer(serializers.ModelSerializer):
 
         return instance
     
-    
-
-  
-
-""" get_create_achievement = Achievement.objects.get(data)
-                 """
-                 
-                 
-"""   def update(self, instance: User, validated_data: dict) -> User:
-      
-        if validated_data.get("achievements"):
-            
-            achievement_data = validated_data.pop("achievements")
-            
-            for data in achievement_data:
-                instance.achievements.add(data)
-                
-                
-            
-        for key, value in validated_data.items():
-            setattr(instance, key, value)
-
-        instance.save()
-
-        return instance """
