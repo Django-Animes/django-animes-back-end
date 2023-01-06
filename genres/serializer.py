@@ -12,7 +12,7 @@ class GenreSerializer(serializers.ModelSerializer):
     class Meta:
         model = Genre
         fields = "__all__"
-    animes = AnimeSerializer(many=True)
+    animes = AnimeSerializer(many=True,read_only=True)
 
     def create(self, validated_data: dict):
         genre = validated_data["name"]

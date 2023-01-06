@@ -14,8 +14,6 @@ from .permissions import AnimeListCreatePermission
 class AnimesListCreate(ListCreateAPIView):
     serializer_class = AnimeSerializer
     queryset = Anime.objects.all()
-    permission_classes = [AnimeListCreatePermission]
-    authentication_classes = [JWTAuthentication]
 
     def filter_queryset(self, queryset):
         animes = super().get_queryset()
@@ -34,7 +32,7 @@ class AnimesListCreate(ListCreateAPIView):
             query_genre = formatQueryParams(query_genre)
             animes = animes.filter(genres__name__iexact=query_genre)
         return animes
-
+        
 class AnimesHdList(ListAPIView):
     serializer_class = AnimeSerializer
     queryset = Anime.objects.all()
