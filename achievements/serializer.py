@@ -6,7 +6,6 @@ class AchievementSerializer(serializers.ModelSerializer):
     class Meta:
         model = Achievement
         fields = "__all__"
-    
 
     def create(self, validated_data):
         achievement,_ = Achievement.objects.get_or_create(name=validated_data['name'])
@@ -34,3 +33,12 @@ class AchievementUserSerializer(serializers.Serializer):
         achievement = validated_data['achievement']
         user.achievements.add(achievement)
         return user
+
+class AchievementUserUpdateSerializer(serializers.ModelSerializer):
+    
+    achievement_id = serializers.IntegerField(write_only=True)
+
+    class Meta():
+        model = Achievement
+        fields = "__all__"
+
