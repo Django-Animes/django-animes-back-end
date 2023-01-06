@@ -99,7 +99,7 @@ WSGI_APPLICATION = "djangoAnimes.wsgi.application"
 #         "HOST": "127.0.0.1",
 #         "PORT": 5432,
 #     }
-    
+
 # }
 
 DATABASES = {
@@ -109,6 +109,7 @@ DATABASES = {
     }
 }
 
+CONN_MAX_AGE = None
 
 DATABASE_URL = os.getenv("DATABASE_URL")
 
