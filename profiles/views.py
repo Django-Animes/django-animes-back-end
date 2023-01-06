@@ -4,31 +4,50 @@ from rest_framework.generics import (
     RetrieveUpdateDestroyAPIView,
 )
 from rest_framework_simplejwt.authentication import JWTAuthentication
+from .serializers import ProfileSerializer, EpisodeWatchSerializer
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import Response, status
 from django.shortcuts import get_object_or_404
 from .permissions import IsAdm, IsAccountOwner
-from .serializers import ProfileSerializer, EpisodeWatchSerializer
 from episodes.models import Episode
 from users.models import User
 from .models import Profile
+import ipdb
 
 
-class ProfileCreate(CreateAPIView):
+class ProfileListCreate(CreateAPIView, ListAPIView):
     authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
 
     serializer_class = ProfileSerializer
     queryset = Profile.objects.all()
 
+    def get_object(self):
+        user = self.request.user
+        return user
+
+    def create(self, request, *args, **kwargs):
+        user = self.get_object()
+        data = request.data
+
+        serializer = ProfileSerializer(data=data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save(user=user)
+
+        return Response(data=serializer.data, status=status.HTTP_201_CREATED)
+
 
 class ProfileWatchEpisodeCreate(CreateAPIView):
     authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
     queryset = Profile.objects.all()
 
     def create(self, request, *args, **kwargs):
         profile = self.get_object()
         data = request.data
         user: User = request.user
-        is_user_profile_exists = user.profiles.filter(profile).exists()
+
+        is_user_profile_exists = user.profiles.filter(pk=profile.id).exists()
 
         if not is_user_profile_exists:
             msg = {"detail": "user not have the specify profile"}
@@ -41,18 +60,18 @@ class ProfileWatchEpisodeCreate(CreateAPIView):
 
         serializer.save(profile=profile, episode=episode)
 
+        serializer = ProfileSerializer(profile)
 
-class ProfileList(ListAPIView):
+        return Response(data=serializer.data, status=status.HTTP_200_OK)
+
+
+class ProfileRetrieveUpdateDelete(RetrieveUpdateDestroyAPIView):
     authentication_classes = [JWTAuthentication]
-    permission_classes = [IsAdm]
+    permission_classes = [IsAuthenticated]
 
     serializer_class = ProfileSerializer
     queryset = Profile.objects.all()
 
-
-class ProfileGetUpdateDelete(RetrieveUpdateDestroyAPIView):
-    authentication_classes = [JWTAuthentication]
-    permission_classes = [IsAccountOwner]
-
-    serializer_class = ProfileSerializer
-    queryset = Profile.objects.all()
+    def get_object(self):
+        user = self.request.user
+        return user
