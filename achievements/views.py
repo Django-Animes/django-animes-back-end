@@ -12,6 +12,9 @@ class AchievementView(ListCreateAPIView):
     queryset = Achievement.objects.all()
     serializer_class = AchievementSerializer
 
+class AchievementRetrieveUpdateDestroy():
+    ...
+
 
 """ def perform_create(self, serializer):
         return serializer.save()
