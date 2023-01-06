@@ -7,7 +7,6 @@ from animes.models import Anime
 from genres.models import Genre
 from episodes.models import Episode
 
-
 class Command(BaseCommand):
     ANIME_API = 'https://appanimeplus.tk/play-api.php'
     ANIME_API_IMG = 'https://cdn.appanimeplus.tk/img/'
