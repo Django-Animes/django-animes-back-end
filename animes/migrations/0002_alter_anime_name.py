@@ -12,6 +12,7 @@ class Migration(migrations.Migration):
     operations = [
         migrations.AlterField(
             model_name="anime",
+            name="name",
             field=models.TextField(),
         ),
     ]
