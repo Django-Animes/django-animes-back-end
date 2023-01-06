@@ -83,7 +83,11 @@ class AchievementUserCreateRetrieveUpdateDestroy(
             msg = {"detail": "user not have the specify achievement"}
             return Response(data=msg, status=status.HTTP_404_NOT_FOUND)
         achievement = Achievement.objects.get(pk=achievement_id)
-        serializer = AchievementUserUpdateSerializer(achievement, data, partial=True)
+        serializer = AchievementUserUpdateSerializer(
+            achievement,
+            data,
+            partial=True,
+        )
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response(data=serializer.data, status=status.HTTP_200_OK)
