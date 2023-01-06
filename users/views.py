@@ -4,6 +4,11 @@ from .models import User
 from .serializer import UserSerializer
 from .permissions import IsAccountOwner, IsAdm, IsYourself
 from rest_framework_simplejwt.authentication import JWTAuthentication
+from achievements.models import Achievement
+from django.shortcuts import get_object_or_404
+from .serializer import UserSerializer
+import ipdb
+
 
 
 class UserView(CreateAPIView):
@@ -25,7 +30,3 @@ class UserDetailView(RetrieveUpdateAPIView):
 
     serializer_class = UserSerializer
     queryset = User.objects.all()
-
-    def get_queryset(self):
-        user = User.objects.filter(id=self.request.user.id)
-        return user
