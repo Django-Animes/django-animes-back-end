@@ -14,3 +14,4 @@ class AchievementView(ListCreateAPIView):
 
     def perform_create(self, serializer):
         return serializer.save()
+        
