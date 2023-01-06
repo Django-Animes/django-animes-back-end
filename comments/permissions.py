@@ -11,5 +11,5 @@ class IsCommentOwner(permissions.BasePermission):
             profile = Profile.objects.get(pk=profile)
             return profile.comments.all().get(obj).exists()
         except Profile.DoesNotExist:
-            detail = {"detail": "Profile is not found"}
+            detail = {"detail": "Profile not found"}
             return Response(data=detail, status=404)
