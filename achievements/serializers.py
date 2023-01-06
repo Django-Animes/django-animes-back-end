@@ -11,6 +11,7 @@ class AchievementSerializer(serializers.ModelSerializer):
         new_Achievement = Achievement.objects.get_or_create(**validated_data)
         return new_Achievement
 
+
 class AchievementUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = Achievement_user
