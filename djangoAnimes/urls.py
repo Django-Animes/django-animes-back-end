@@ -21,4 +21,5 @@ urlpatterns = [
     path("api/", include("animes.urls")),
     path("api/", include("users.urls")),
     path("api/", include("profiles.urls")),
+    path("api/", include("achievements.urls"))
 ]
