@@ -75,3 +75,52 @@ class ProfileRetrieveUpdateDelete(RetrieveUpdateDestroyAPIView):
     def get_object(self):
         user = self.request.user
         return user
+
+    def retrieve(self, request, *args, **kwargs):
+        user = self.get_object()
+        profile = self.kwargs["pk"]
+
+        is_user_profile_exists = user.profiles.filter(pk=profile).exists()
+
+        if not is_user_profile_exists:
+            msg = {"detail": "user not have the specify profile"}
+            return Response(data=msg, status=status.HTTP_404_NOT_FOUND)
+
+        profile = Profile.objects.get(pk=profile)
+
+        serializer = ProfileSerializer(profile)
+
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    def partial_update(self, request, *args, **kwargs):
+        user = self.get_object()
+        profile = self.kwargs["pk"]
+        data = request.data
+
+        is_user_profile_exists = user.profiles.filter(pk=profile).exists()
+
+        if not is_user_profile_exists:
+            msg = {"detail": "user not have the specify profile"}
+            return Response(data=msg, status=status.HTTP_404_NOT_FOUND)
+
+        profile = Profile.objects.get(pk=profile)
+
+        serializer = ProfileSerializer(profile, data=data, partial=True)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+
+        return Response(data=serializer.data, status=status.HTTP_200_OK)
+
+    def destroy(self, request, *args, **kwargs):
+        user = self.get_object()
+        profile = self.kwargs["pk"]
+
+        is_user_profile_exists = user.profiles.filter(pk=profile).exists()
+
+        if not is_user_profile_exists:
+            msg = {"detail": "user not have the specify profile"}
+            return Response(data=msg, status=status.HTTP_404_NOT_FOUND)
+
+        profile = Profile.objects.get(pk=profile).delete()
+
+        return Response(status=status.HTTP_204_NO_CONTENT)
