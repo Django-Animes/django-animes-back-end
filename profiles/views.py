@@ -8,7 +8,6 @@ from .serializers import ProfileSerializer, EpisodeWatchSerializer
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import Response, status
 from django.shortcuts import get_object_or_404
-from .permissions import IsAdm, IsAccountOwner
 from episodes.models import Episode
 from users.models import User
 from .models import Profile
