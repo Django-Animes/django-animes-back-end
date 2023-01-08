@@ -47,3 +47,16 @@ class AnimeEpisodeAddUpdateSerializer(serializers.ModelSerializer):
 
 class AnimeGenreAddSerializer(serializers.Serializer):
     genre_id = serializers.IntegerField()
+
+    def create(self, validated_data):
+        genre = validated_data["genre"]
+        anime = validated_data["anime"]
+
+        anime.genres.add(genre)
+
+        return anime
+class AnimeGenreAddUpdateSerializer(serializers.ModelSerializer):
+    class Meta():
+        model = Genre
+        fields = "__all__"
+
