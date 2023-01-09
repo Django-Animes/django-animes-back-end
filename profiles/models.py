@@ -24,3 +24,4 @@ class Profile(models.Model):
         related_name="profiles_viewed",
         through="profiles.Episodes_viewed",
     )
+    animes = models.ManyToManyField("animes.Anime", related_name="profiles")

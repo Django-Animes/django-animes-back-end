@@ -11,7 +11,6 @@ from django.shortcuts import get_object_or_404
 from episodes.models import Episode
 from users.models import User
 from .models import Profile
-import ipdb
 
 
 class ProfileListCreate(CreateAPIView, ListAPIView):
