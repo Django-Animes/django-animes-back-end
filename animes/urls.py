@@ -1,11 +1,14 @@
 from django.urls import path
-from animes.views import AnimesListCreate,AnimesHdList,AnimesRetrieveUpdateDestroy,EpisodeRetrieveUpdateDestroy,EpisodeListCreate,GenreListCreate
+from . import views
 
 urlpatterns = [
-    path('animes/',AnimesListCreate.as_view()),
-    path('animes/hd/',AnimesHdList.as_view()),
-    path('animes/<int:pk>/',AnimesRetrieveUpdateDestroy.as_view()),
-    path('animes/episode/',EpisodeListCreate.as_view()),
-    path('animes/episode/<int:pk>/',EpisodeRetrieveUpdateDestroy.as_view()),
-    path('animes/genre/',GenreListCreate.as_view())
+    path('animes/',views.AnimesListCreate.as_view()),
+    path('animes/hd/',views.AnimesHdList.as_view()),
+    path('animes/<int:pk>/',views.AnimesRetrieveUpdateDestroy.as_view()),
+    path('animes/episode/',views.EpisodeListCreate.as_view()),
+    path('animes/episode/<int:pk>/',views.EpisodeRetrieveUpdateDestroy.as_view()),
+    path('animes/<int:pk>/episode/',views.AnimesEpisodeAdd.as_view()),
+    path('animes/genre/',views.GenreListCreate.as_view()),
+    path('animes/genre/<int:pk>/',views.AnimeGenreRetrieveUpdateDestroy.as_view()),
+    path('animes/<int:pk>/genre/',views.AnimesGenreAdd.as_view())
 ]
