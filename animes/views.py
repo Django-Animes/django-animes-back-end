@@ -1,19 +1,21 @@
 from rest_framework.views import status,Response
 from rest_framework.generics import ListAPIView,ListCreateAPIView,RetrieveUpdateDestroyAPIView,CreateAPIView
-import ipdb
 from .serializer import AnimeSerializer,AnimeEpisodeAddSerializer,AnimeGenreAddSerializer,AnimeEpisodeAddUpdateSerializer,AnimeGenreAddUpdateSerializer
 from episodes.serializer import AnimeEpisodeSerializer
-from episodes.serializer import EpisodeSerializer
 from genres.serializer import GenreSerializer
+from rest_framework_simplejwt.authentication import JWTAuthentication
 from .models import Anime
 from episodes.models import Episode
 from genres.models import Genre
 from .utils import formatQueryParams
 from django.shortcuts import get_object_or_404
+from .permissions import AnimePermission
 
 class AnimesListCreate(ListCreateAPIView):
     serializer_class = AnimeSerializer
     queryset = Anime.objects.all()
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [AnimePermission]
 
     def filter_queryset(self, queryset):
         animes = super().get_queryset()
@@ -36,6 +38,8 @@ class AnimesListCreate(ListCreateAPIView):
 class AnimesHdList(ListAPIView):
     serializer_class = AnimeSerializer
     queryset = Anime.objects.all()
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [AnimePermission]
 
     def get_queryset(self):
         animes = super().get_queryset()
@@ -45,21 +49,31 @@ class AnimesHdList(ListAPIView):
 class AnimesRetrieveUpdateDestroy(RetrieveUpdateDestroyAPIView):
     serializer_class = AnimeSerializer
     queryset = Anime.objects.all()
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [AnimePermission]
 
 class EpisodeListCreate(ListCreateAPIView):
     serializer_class = AnimeEpisodeSerializer
     queryset = Episode.objects.all()
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [AnimePermission]
 
 class EpisodeRetrieveUpdateDestroy(RetrieveUpdateDestroyAPIView):
     serializer_class = AnimeEpisodeSerializer
     queryset = Episode.objects.all()
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [AnimePermission]
 
 class GenreListCreate(ListCreateAPIView):
     serializer_class = GenreSerializer
     queryset = Genre.objects.all()
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [AnimePermission]
 
 class AnimesEpisodeAdd(CreateAPIView,RetrieveUpdateDestroyAPIView):
     
+    permission_classes = [AnimePermission]
+    authentication_classes = [JWTAuthentication]
     queryset = Anime.objects.all()
 
     def create(self, request, *args, **kwargs):
@@ -147,6 +161,8 @@ class AnimesEpisodeAdd(CreateAPIView,RetrieveUpdateDestroyAPIView):
 
 class AnimesGenreAdd(CreateAPIView,RetrieveUpdateDestroyAPIView):
 
+    permission_classes = [AnimePermission]
+    authentication_classes = [JWTAuthentication]
     queryset = Anime.objects.all()
 
 
@@ -233,6 +249,9 @@ class AnimesGenreAdd(CreateAPIView,RetrieveUpdateDestroyAPIView):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 class AnimeGenreRetrieveUpdateDestroy(RetrieveUpdateDestroyAPIView):
+    
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [AnimePermission]
     serializer_class = GenreSerializer
     queryset = Genre.objects.all()
     

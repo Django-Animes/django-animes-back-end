@@ -26,7 +26,7 @@ class AnimeEpisodeSerializer(serializers.ModelSerializer):
         exclude = ("anime",)
 
     def create(self, validated_data):
-        episode = Episode.objects.get_or_create(**validated_data)
+        episode,_ = Episode.objects.get_or_create(**validated_data)
         return episode
 
 

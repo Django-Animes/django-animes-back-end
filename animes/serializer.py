@@ -16,17 +16,7 @@ class AnimeSerializer(serializers.ModelSerializer):
     amount_of_episodes = serializers.SerializerMethodField()
 
     def get_amount_of_episodes(self,obj):
-        return len(obj.episodes.all())
-        
-    def create(self, validated_data: dict):
-        anime,_ = Anime.objects.get_or_create(**validated_data)
-        return anime
-    def update(self, instance : dict, validated_data: dict):
-        episodes = validated_data.pop("episodes",None)
-        genres = validated_data.pop("genres",None)
-        for key,value in validated_data.items():
-            setattr(instance,key,value)
-        return instance       
+        return len(obj.episodes.all()) 
 
 class AnimeEpisodeAddSerializer(serializers.Serializer):
     episode_id = serializers.IntegerField(write_only=True)
