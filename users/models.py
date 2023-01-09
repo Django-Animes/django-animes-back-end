@@ -14,6 +14,6 @@ class User(AbstractUser):
     email = models.EmailField(unique=True)
     type = models.TextField(choices=TypeUser.choices, default=TypeUser.TYPE_FREE)
     achievements = models.ManyToManyField(
-            Achievement,
-            related_name="users",
-        )
+        Achievement,
+        related_name="users",
+    )

@@ -26,7 +26,7 @@ class UserAchievementSerializer(serializers.ModelSerializer):
     
 
 class UserSerializer(serializers.ModelSerializer):
-    achievements = AchievementSerializer(many=True)
+    achievements = AchievementSerializer(many=True, read_only=True)
     class Meta:
         model = User
         fields = [
@@ -37,30 +37,26 @@ class UserSerializer(serializers.ModelSerializer):
             "first_name",
             "last_name",
             "type",
-            "is_superuser",
             "is_active",
             "achievements"
         ]
+        read_only_fields = ["is_superuser"]
         extra_kwargs = {
             "email": {
                 "required": True,
                 "validators": [
                     UniqueValidator(
                         queryset=User.objects.all(),
-                        message="Username is already in use.",
+                        message="Email is already in use.",
                     )
                 ],
             },
             "password": {"write_only": True},
-            "achievements": {"allow_null": True, "required": False},
         }
         
         
 
     def create(self, validated_data: dict) -> User:
-        if validated_data["is_superuser"]:
-            super_user = User.objects.create_superuser(**validated_data)
-            return super_user
         user = User.objects.create_user(**validated_data)
         return user
     
