@@ -3,12 +3,17 @@ from rest_framework.generics import (
     ListAPIView,
     RetrieveUpdateDestroyAPIView,
 )
+from .serializers import (
+    ProfileSerializer,
+    EpisodeWatchSerializer,
+    AnimeFavoritedSerializer,
+)
 from rest_framework_simplejwt.authentication import JWTAuthentication
-from .serializers import ProfileSerializer, EpisodeWatchSerializer
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import Response, status
 from django.shortcuts import get_object_or_404
 from episodes.models import Episode
+from animes.models import Anime
 from users.models import User
 from .models import Profile
 
@@ -35,7 +40,7 @@ class ProfileListCreate(CreateAPIView, ListAPIView):
         return Response(data=serializer.data, status=status.HTTP_201_CREATED)
 
 
-class ProfileWatchEpisodeCreate(CreateAPIView):
+class ProfileWatchEpisodeAdd(CreateAPIView):
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]
     queryset = Profile.objects.all()
@@ -122,3 +127,31 @@ class ProfileRetrieveUpdateDelete(RetrieveUpdateDestroyAPIView):
         profile = Profile.objects.get(pk=profile).delete()
 
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class ProfileAnimeFavoritedAdd(CreateAPIView):
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
+    queryset = Profile.objects.all()
+
+    def create(self, request, *args, **kwargs):
+        profile = self.get_object()
+        data = request.data
+        user: User = request.user
+
+        is_user_profile_exists = user.profiles.filter(pk=profile.id).exists()
+
+        if not is_user_profile_exists:
+            msg = {"detail": "user not have the specify profile"}
+            return Response(data=msg, status=status.HTTP_404_NOT_FOUND)
+
+        serializer = AnimeFavoritedSerializer(data=data)
+        serializer.is_valid(raise_exception=True)
+
+        anime = get_object_or_404(Anime, pk=serializer.validated_data["anime_id"])
+
+        serializer.save(profile=profile, anime=anime)
+
+        serializer = ProfileSerializer(profile)
+
+        return Response(data=serializer.data, status=status.HTTP_200_OK)

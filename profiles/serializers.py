@@ -9,9 +9,14 @@ class EpisodeViewedSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
+class AnimeNameSerializer(serializers.Serializer):
+    name = serializers.CharField()
+
+
 class ProfileSerializer(serializers.ModelSerializer):
     last_episode_viewed = serializers.SerializerMethodField()
     episodes_viewed = EpisodeViewedSerializer(many=True, read_only=True)
+    animes = AnimeNameSerializer(many=True, read_only=True)
 
     class Meta:
         model = Profile
@@ -35,5 +40,17 @@ class EpisodeWatchSerializer(serializers.Serializer):
         episode = validated_data["episode"]
 
         profile.episodes_viewed.add(episode)
+
+        return profile
+
+
+class AnimeFavoritedSerializer(serializers.Serializer):
+    anime_id = serializers.IntegerField()
+
+    def create(self, validated_data):
+        profile = validated_data["profile"]
+        anime = validated_data["anime"]
+
+        profile.animes.add(anime)
 
         return profile
