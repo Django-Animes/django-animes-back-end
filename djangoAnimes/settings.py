@@ -9,6 +9,7 @@ https://docs.djangoproject.com/en/4.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.1/ref/settings/
 """
+import sys
 from django.core.management.utils import get_random_secret_key
 from pathlib import Path
 from datetime import timedelta
@@ -111,7 +112,11 @@ DATABASES = {
         "NAME": BASE_DIR / "db.sqlite3",
     },
 }
-
+if 'test' in sys.argv:
+    DATABASES['default'] = {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': 'mydatabase'
+    }
 
 DATABASE_URL = os.getenv("DATABASE_URL")
 

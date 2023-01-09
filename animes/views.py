@@ -1,17 +1,21 @@
-from rest_framework.views import status,Response,Request
-from rest_framework.generics import ListAPIView,ListCreateAPIView,RetrieveUpdateDestroyAPIView
-import ipdb
-from .serializer import AnimeSerializer
-from episodes.serializer import EpisodeSerializer
+from rest_framework.views import status,Response
+from rest_framework.generics import ListAPIView,ListCreateAPIView,RetrieveUpdateDestroyAPIView,CreateAPIView
+from .serializer import AnimeSerializer,AnimeEpisodeAddSerializer,AnimeGenreAddSerializer,AnimeEpisodeAddUpdateSerializer,AnimeGenreAddUpdateSerializer
+from episodes.serializer import AnimeEpisodeSerializer
 from genres.serializer import GenreSerializer
+from rest_framework_simplejwt.authentication import JWTAuthentication
 from .models import Anime
 from episodes.models import Episode
 from genres.models import Genre
 from .utils import formatQueryParams
+from django.shortcuts import get_object_or_404
+from .permissions import AnimePermission
 
 class AnimesListCreate(ListCreateAPIView):
     serializer_class = AnimeSerializer
     queryset = Anime.objects.all()
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [AnimePermission]
 
     def filter_queryset(self, queryset):
         animes = super().get_queryset()
@@ -34,6 +38,8 @@ class AnimesListCreate(ListCreateAPIView):
 class AnimesHdList(ListAPIView):
     serializer_class = AnimeSerializer
     queryset = Anime.objects.all()
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [AnimePermission]
 
     def get_queryset(self):
         animes = super().get_queryset()
@@ -43,16 +49,209 @@ class AnimesHdList(ListAPIView):
 class AnimesRetrieveUpdateDestroy(RetrieveUpdateDestroyAPIView):
     serializer_class = AnimeSerializer
     queryset = Anime.objects.all()
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [AnimePermission]
 
 class EpisodeListCreate(ListCreateAPIView):
-    serializer_class = EpisodeSerializer
+    serializer_class = AnimeEpisodeSerializer
     queryset = Episode.objects.all()
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [AnimePermission]
 
 class EpisodeRetrieveUpdateDestroy(RetrieveUpdateDestroyAPIView):
-    serializer_class = EpisodeSerializer
+    serializer_class = AnimeEpisodeSerializer
     queryset = Episode.objects.all()
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [AnimePermission]
 
 class GenreListCreate(ListCreateAPIView):
+    serializer_class = GenreSerializer
+    queryset = Genre.objects.all()
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [AnimePermission]
+
+class AnimesEpisodeAdd(CreateAPIView,RetrieveUpdateDestroyAPIView):
+    
+    permission_classes = [AnimePermission]
+    authentication_classes = [JWTAuthentication]
+    queryset = Anime.objects.all()
+
+    def create(self, request, *args, **kwargs):
+        anime = self.get_object()
+
+        data = request.data
+
+        serializer = AnimeEpisodeAddSerializer(data=data)
+
+        serializer.is_valid(raise_exception=True)
+
+        episode = get_object_or_404(Episode,pk=serializer.validated_data["episode_id"])
+
+        serializer.save(anime=anime,episode=episode)
+
+        serializer = AnimeSerializer(anime)
+
+        return Response(data=serializer.data,status=status.HTTP_200_OK)
+
+    def retrieve(self, request, *args, **kwargs):
+        anime = self.get_object()
+
+        data = request.data
+
+        serializer = AnimeEpisodeAddSerializer(data=data)
+
+        serializer.is_valid(raise_exception=True)
+
+        is_episode_in_anime = anime.episodes.filter(pk=serializer.validated_data["episode_id"]).exists()
+        
+        if not is_episode_in_anime:
+            msg =  msg = {"detail" : "Anime not have the specify episode"}
+            return Response(data=msg,status=status.HTTP_404_NOT_FOUND)
+
+        episode = Episode.objects.get(pk=serializer.validated_data["episode_id"])
+
+        serializer = AnimeEpisodeSerializer(episode)
+
+        return Response(data=serializer.data,status=status.HTTP_200_OK)
+
+    
+    def partial_update(self, request, *args, **kwargs):
+        anime = self.get_object()
+
+        data = request.data
+
+        serializer = AnimeEpisodeAddSerializer(data=data)
+
+        serializer.is_valid(raise_exception=True)
+
+        is_episode_in_anime = anime.episodes.filter(pk=serializer.validated_data["episode_id"]).exists()
+
+        if not is_episode_in_anime:
+            msg = {"detail" : "Anime not have the specify episode"}
+            return Response(data=msg,status=status.HTTP_404_NOT_FOUND)
+
+        episode = Episode.objects.get(pk=serializer.validated_data["episode_id"])
+
+        serializer = AnimeEpisodeAddUpdateSerializer(episode,data,partial=True)
+
+        serializer.is_valid(raise_exception=True)
+
+        serializer.save()
+
+        return Response(data=serializer.data,status=status.HTTP_200_OK)
+
+    def destroy(self, request, *args, **kwargs):
+        anime = self.get_object()
+
+        data = request.data
+
+        serializer = AnimeEpisodeAddSerializer(data=data)
+
+        serializer.is_valid(raise_exception=True)
+
+        is_episode_in_anime = anime.episodes.filter(pk=serializer.validated_data["episode_id"]).exists()
+
+        if not is_episode_in_anime:
+            msg = {"detail" : "Anime not have the specify episode"}
+            return Response(data=msg,status=status.HTTP_404_NOT_FOUND)
+
+        Episode.objects.get(pk=serializer.validated_data["episode_id"]).delete()
+
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+class AnimesGenreAdd(CreateAPIView,RetrieveUpdateDestroyAPIView):
+
+    permission_classes = [AnimePermission]
+    authentication_classes = [JWTAuthentication]
+    queryset = Anime.objects.all()
+
+
+    def create(self, request, *args, **kwargs):
+        anime = self.get_object()
+
+        data = request.data
+
+        serializer = AnimeGenreAddSerializer(data=data)
+
+        serializer.is_valid(raise_exception=True)
+
+        genre = get_object_or_404(Genre,pk=serializer.validated_data["genre_id"])
+
+        serializer.save(anime=anime,genre=genre)
+
+        serializer = AnimeSerializer(anime)
+
+        return Response(data=serializer.data,status=status.HTTP_200_OK)
+    
+    def retrieve(self, request, *args, **kwargs):
+        anime = self.get_object()
+
+        data = request.data
+        
+        serializer = AnimeGenreAddSerializer(data=data)
+
+        serializer.is_valid(raise_exception=True)
+
+        is_genre_in_anime = anime.genres.filter(pk=serializer.validated_data["genre_id"]).exists()
+
+        if not is_genre_in_anime:
+            msg = {"detail" : "Anime not have the specify genre"}
+            return Response(data=msg,status=status.HTTP_404_NOT_FOUND)
+
+        genre = Genre.objects.get(pk=serializer.validated_data["genre_id"])
+
+        serializer = GenreSerializer(genre)
+
+        return Response(data=serializer.data,status=status.HTTP_200_OK)
+    
+    def partial_update(self, request, *args, **kwargs):
+        anime = self.get_object()
+
+        data = request.data
+
+        serializer = AnimeGenreAddSerializer(data=data)
+
+        serializer.is_valid(raise_exception=True)
+
+        is_genre_in_anime = anime.genres.filter(pk=serializer.validated_data["genre_id"]).exists()
+
+        if not is_genre_in_anime:
+            msg = {"detail" : "Anime not have the specify genre"}
+            return Response(data=msg,status=status.HTTP_404_NOT_FOUND)
+
+        genre = Genre.objects.get(pk=serializer.validated_data["genre_id"])
+
+        serializer = AnimeGenreAddUpdateSerializer(genre,data=data,partial=True)
+
+        serializer.is_valid(raise_exception=True)
+
+        serializer.save()
+
+        return Response(data=serializer.data,status=status.HTTP_200_OK)
+
+    def destroy(self, request, *args, **kwargs):
+        anime = self.get_object()
+
+        data = request.data
+
+        serializer = AnimeGenreAddSerializer(data=data)
+
+        serializer.is_valid(raise_exception=True)
+
+        is_genre_in_anime = anime.genres.filter(pk=serializer.validated_data["genre_id"]).exists()
+
+        if not is_genre_in_anime:
+            msg = {"detail" : "Anime not have the specify genre"}
+            return Response(data=msg,status=status.HTTP_404_NOT_FOUND)
+
+        Genre.objects.get(pk=serializer.validated_data["genre_id"]).delete()
+
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+class AnimeGenreRetrieveUpdateDestroy(RetrieveUpdateDestroyAPIView):
+    
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [AnimePermission]
     serializer_class = GenreSerializer
     queryset = Genre.objects.all()
     
