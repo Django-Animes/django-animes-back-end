@@ -1,7 +1,7 @@
 from django.db import models
 
 
-class Animes_viewed(models.Model):
+class Episodes_viewed(models.Model):
     profile = models.ForeignKey(
         "profiles.Profile", on_delete=models.CASCADE, related_name="viewed_profile"
     )
@@ -19,8 +19,9 @@ class Profile(models.Model):
     user = models.ForeignKey(
         "users.User", on_delete=models.CASCADE, related_name="profiles"
     )
-    animes_viewed = models.ManyToManyField(
+    episodes_viewed = models.ManyToManyField(
         "episodes.Episode",
-        related_name="profile_viewed",
-        through="profiles.Animes_viewed",
+        related_name="profiles_viewed",
+        through="profiles.Episodes_viewed",
     )
+    animes = models.ManyToManyField("animes.Anime", related_name="profiles")
