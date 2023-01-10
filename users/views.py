@@ -26,7 +26,7 @@ class UserListView(ListAPIView):
 
 class UserDetailView(RetrieveUpdateAPIView):
     authentication_classes = [JWTAuthentication]
-    permission_classes = [IsAccountOwner]
+    permission_classes = [IsYourself]
 
     serializer_class = UserSerializer
     queryset = User.objects.all()
