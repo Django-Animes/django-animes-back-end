@@ -329,12 +329,68 @@ class AnimesTest(APITestCase):
         response = self.api_common_user.patch(path=self.BASE_URL + f"episode/{self.episode_id}/")
         self.assertIs(status.HTTP_403_FORBIDDEN,response.status_code)
 
+    def test_edit_episode_inside_anime_without_token(self):
+        episode_id  = {"episode_id" : self.episode_id}
+        response = self.api.post(self.BASE_URL + f"{self.anime_id}/episode/",data=episode_id)
+        response = self.api_without_token.patch(path=self.BASE_URL + f"{self.anime_id}/episode/")
+        self.assertIs(status.HTTP_401_UNAUTHORIZED,response.status_code)
+
     def test_edit_genre_without_token(self):
         response = self.api_without_token.patch(path=self.BASE_URL + f"genre/{self.genre_id}/")
         self.assertIs(status.HTTP_401_UNAUTHORIZED,response.status_code)
 
     def test_edit_genre_using_user_common_token(self):
         response = self.api_common_user.patch(path=self.BASE_URL + f"genre/{self.genre_id}/")
+        self.assertIs(status.HTTP_403_FORBIDDEN,response.status_code)
+    
+    def test_edit_genre_inside_anime_without_token(self):
+        genre_id  = {"genre_id" : self.genre_id}
+        response = self.api.post(self.BASE_URL + f"{self.anime_id}/episode/",data=genre_id)
+        response = self.api_without_token.patch(path=self.BASE_URL + f"{self.anime_id}/episode/")
+        self.assertIs(status.HTTP_401_UNAUTHORIZED,response.status_code)
+
+    def test_delete_anime_without_token(self):
+        response = self.api_without_token.delete(path=self.BASE_URL + f"{self.anime_id}/")
+        self.assertIs(status.HTTP_401_UNAUTHORIZED,response.status_code)
+
+    def test_delete_anime_using_user_common_token(self):
+       response = self.api_common_user.delete(path=self.BASE_URL + f"{self.anime_id}/")
+       self.assertIs(status.HTTP_403_FORBIDDEN,response.status_code)
+
+    def test_delete_episode_without_token(self):
+        response = self.api_without_token.delete(path=self.BASE_URL + f"episode/{self.episode_id}/")
+        self.assertIs(status.HTTP_401_UNAUTHORIZED,response.status_code)
+
+    def test_delete_episode_using_user_common_token(self):
+        response = self.api_common_user.delete(path=self.BASE_URL + f"episode/{self.episode_id}/")
+        self.assertIs(status.HTTP_403_FORBIDDEN,response.status_code)
+
+    def test_delete_genre_without_token(self):
+        response = self.api_without_token.delete(path=self.BASE_URL + f"genre/{self.genre_id}/")
+        self.assertIs(status.HTTP_401_UNAUTHORIZED,response.status_code)
+
+    def test_delete_genre_using_user_common_token(self):
+        response = self.api_common_user.delete(path=self.BASE_URL + f"genre/{self.genre_id}/")
+        self.assertIs(status.HTTP_403_FORBIDDEN,response.status_code)
+
+    def test_delete_anime_using_user_common_token(self):
+       response = self.api_common_user.delete(path=self.BASE_URL + f"{self.anime_id}/")
+       self.assertIs(status.HTTP_403_FORBIDDEN,response.status_code)
+
+    def test_delete_episode_without_token(self):
+        response = self.api_without_token.delete(path=self.BASE_URL + f"episode/{self.episode_id}/")
+        self.assertIs(status.HTTP_401_UNAUTHORIZED,response.status_code)
+
+    def test_delete_episode_using_user_common_token(self):
+        response = self.api_common_user.delete(path=self.BASE_URL + f"episode/{self.episode_id}/")
+        self.assertIs(status.HTTP_403_FORBIDDEN,response.status_code)
+
+    def test_delete_genre_without_token(self):
+        response = self.api_without_token.delete(path=self.BASE_URL + f"genre/{self.genre_id}/")
+        self.assertIs(status.HTTP_401_UNAUTHORIZED,response.status_code)
+
+    def test_delete_genre_using_user_common_token(self):
+        response = self.api_common_user.delete(path=self.BASE_URL + f"genre/{self.genre_id}/")
         self.assertIs(status.HTTP_403_FORBIDDEN,response.status_code)
 
     
