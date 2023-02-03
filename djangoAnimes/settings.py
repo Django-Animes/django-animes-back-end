@@ -36,6 +36,8 @@ CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
 ]
 
+ALLOWED_HOSTS = []
+
 # Application definition
 MY_APPS = [
     "animes",
